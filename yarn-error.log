@@ -1,0 +1,65 @@
+Arguments: 
+  /usr/bin/node /usr/local/bin/yarn
+
+PATH: 
+  /usr/local/lib/node_modules:/home/syllomex/.zinit/polaris/bin:/usr/local/lib/node_modules:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/syllomex/Android/Sdk/emulator:/home/syllomex/Android/Sdk/tools:/home/syllomex/Android/Sdk/tools/bin:/home/syllomex/Android/Sdk/platform-tools:/home/syllomex/Android/Sdk/emulator:/home/syllomex/Android/Sdk/tools:/home/syllomex/Android/Sdk/tools/bin:/home/syllomex/Android/Sdk/platform-tools
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  12.18.2
+
+Platform: 
+  linux x64
+
+Trace: 
+  SyntaxError: /home/syllomex/dev/smart-mirror/package.json: Unexpected token / in JSON at position 832
+      at JSON.parse (<anonymous>)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "smart-mirror",
+    "version": "1.0.0",
+    "description": "Smart Mirror API",
+    "main": "index.js",
+    "repository": "https://github.com/syllomex/smart-mirror-api.git",
+    "author": "Leonardo Santos",
+    "license": "MIT",
+    "private": true,
+    "devDependencies": {
+      "@types/express": "^4.17.13",
+      "@types/mongoose": "^5.11.97",
+      "@typescript-eslint/eslint-plugin": "^4.29.3",
+      "@typescript-eslint/parser": "^4.29.3",
+      "concurrently": "^6.2.1",
+      "eslint": "^5.16.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-config-airbnb-typescript": "^14.0.0",
+      "eslint-plugin-import": "^2.22.1",
+      "nodemon": "^2.0.12",
+      "prettier": "^2.3.2",
+      "prettier-eslint": "^13.0.0",
+      "ts-node-dev": "^1.1.8",
+      "typescript": "^4.4.2"
+    },
+    "scripts": {
+      "start": "tsc && node ./dist/index.js",
+      // "dev": "ts-node-dev --transpile-only --ignore-watch node_modules ./src/index.ts"
+      "dev": "tsc"
+    },
+    "dependencies": {
+      "express": "^4.17.1",
+      "mongoose": "^6.0.3"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

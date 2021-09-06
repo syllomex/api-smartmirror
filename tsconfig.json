@@ -1,11 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "es6",
     "module": "commonjs",
     "rootDir": "./src",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
     "allowJs": true,
     "outDir": "./dist",
     "esModuleInterop": true,
@@ -14,5 +11,5 @@
     "noImplicitAny": true,
     "skipLibCheck": true
   },
-  "exclude": ["./web", "./dist"]
+  "exclude": ["./dist"]
 }
