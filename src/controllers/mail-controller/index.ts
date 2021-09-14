@@ -25,10 +25,8 @@ const list: Route<ListMailsRequest, ListMailsResponse> = async (req, res) => {
       });
 
       const headers = await auth.getRequestHeaders();
-      console.log(headers);
 
       if (headers.Authorization) {
-        console.log(headers.Authorization);
         auth.setCredentials({ access_token: headers.Authorization.split(' ')[1] });
       }
     } else {
@@ -40,7 +38,9 @@ const list: Route<ListMailsRequest, ListMailsResponse> = async (req, res) => {
 
     const result = await google
       .gmail({ version: 'v1', auth })
-      .users.messages.list({ userId: 'me', maxResults: 5, q: 'is:unread' });
+      .users.messages.list({ userId: 'me', maxResults: 5 });
+
+    if (result.data.resultSizeEstimate === 0) return res.json({ success: true, data: [] });
 
     const promises = result.data.messages?.map((message) => google
       .gmail({ version: 'v1', auth })
@@ -55,10 +55,19 @@ const list: Route<ListMailsRequest, ListMailsResponse> = async (req, res) => {
         return item.data.payload?.headers?.find((_header) => _header.name === header)?.value;
       }
 
+      const date = (() => {
+        const { internalDate } = item.data;
+        if (!internalDate) return null;
+        return new Date(parseInt(internalDate, 10));
+      })();
+
+      const unread = item.data.labelIds?.includes('UNREAD');
+
       const message = {
         subject: getHeader('Subject'),
-        date: getHeader('Date'),
+        date,
         from: getHeader('From'),
+        unread,
       };
 
       return message;
@@ -66,7 +75,7 @@ const list: Route<ListMailsRequest, ListMailsResponse> = async (req, res) => {
 
     return res.json({ success: true, data: messages });
   } catch (err) {
-    return res.json({
+    return res.status(400).json({
       success: false,
       message: 'Não foi possível obter os e-mails.',
       error: err.message,
