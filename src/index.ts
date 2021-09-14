@@ -10,11 +10,17 @@ const app = express();
 
 connect();
 
-// const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development';
 
 app.use(
   cors({
-    origin: '*',
+    origin: isDev ? 'http://localhost:3000' : 'https://smartmirror-display.vercel.app',
+    allowedHeaders: [
+      'Access-Control-Allow-Origin',
+      'Access-Control-Allow-Methods',
+      'Access-Control-Allow-Credentials',
+    ],
+    credentials: true,
   }),
 );
 
