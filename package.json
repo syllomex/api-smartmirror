@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "tsc && node ./dist/index.js",
-    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules ./src/index.ts"
+    "dev": "NODE_ENV=development ts-node-dev --transpile-only --ignore-watch node_modules ./src/index.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
