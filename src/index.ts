@@ -10,25 +10,13 @@ const app = express();
 
 connect();
 
-const isDev = process.env.NODE_ENV === 'development';
+// const isDev = process.env.NODE_ENV === 'development';
 
 app.use(
   cors({
-    origin: isDev ? 'http://localhost:3000' : 'https://smartmirror-display.vercel.app',
-    credentials: true,
+    origin: '*',
   }),
 );
-
-app.use((_req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json',
-  );
-  next();
-});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -37,5 +25,6 @@ app.use(router);
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log('running server on port', PORT);
 });
