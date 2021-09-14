@@ -3,90 +3,69 @@ import MirrorModel from '../../models/Mirror';
 import UserModel from '../../models/User';
 
 import { Route } from '../../types/http';
+import { BadRequest, createController, NotFound } from '../controller';
 
 const create: Route<{ code?: string }> = async (req, res) => {
-  try {
-    const { code } = req.body;
-    console.log(code);
-    if (!code?.length) throw new Error('INCOMPLETE_DATA');
+  const { code } = req.body;
 
-    const exists = await MirrorModel.findOne({ code });
+  if (!code?.length || code.length !== 6) throw new BadRequest('Código inválido.');
 
-    if (exists) {
-      return res.json({
-        success: false,
-        message: 'Código indisponível.',
-        error: 'UNAVAILABLE_CODE',
-      });
-    }
+  const exists = await MirrorModel.findOne({ code });
+  if (exists) throw new BadRequest('Código indisponível.');
 
-    const hash = v4();
+  const hash = v4();
 
-    const newMirror = await MirrorModel.create({ code, hash });
+  const newMirror = await MirrorModel.create({ code, hash });
 
-    return res.json({ success: true, data: newMirror, message: 'Espelho criado!' });
-  } catch (error) {
-    return res.json({
-      success: false,
-      error: error.message,
-      message: 'Não foi possível criar o espelho.',
-    });
-  }
+  return res.status(201).json({
+    success: true,
+    data: newMirror,
+    message: 'Espelho criado!',
+  });
 };
 
 const show: Route<{ hash: string }> = async (req, res) => {
-  try {
-    const { hash } = req.query;
-    if (!hash?.length || typeof hash !== 'string') throw new Error('INCOMPLETE_DATA');
+  const { hash } = req.query;
+  if (!hash?.length || typeof hash !== 'string') throw new BadRequest('Hash inválida.');
 
-    const mirror = await MirrorModel.findOne({ hash }).populate('user');
+  const mirror = await MirrorModel.findOne({ hash }).populate('user');
 
-    if (!mirror) {
-      return res.status(404).json({
-        success: false,
-        message: 'Espelho não encontrado.',
-        error: 'MIRROR_NOT_FOUND',
-      });
-    }
+  if (!mirror) throw new NotFound('Espelho não encontrado.');
 
-    return res.json({ success: true, data: mirror });
-  } catch (error) {
-    return res.json({
-      success: false,
-      error: error.message,
-      message: 'Não foi possível obter o espelho.',
-    });
-  }
+  return res.json({ success: true, data: mirror });
 };
 
 const connect: Route<{ code?: string; googleId?: string }> = async (req, res) => {
-  try {
-    const { code, googleId } = req.body;
-    console.log(code, googleId);
-    if (!code?.length || !googleId?.length) throw new Error('INCOMPLETE_DATA');
+  const { code, googleId } = req.body;
 
-    const user = await UserModel.findOne({ googleId });
-    if (!user) throw new Error('USER_NOT_FOUND');
+  if (!code?.length) throw new BadRequest('Código inválido.');
+  if (!googleId?.length) throw new BadRequest('Google ID não informado.');
 
-    const mirror = await MirrorModel.findOneAndUpdate(
-      { code },
-      { user: user._id, code: null },
-      { new: true },
-    );
-    if (!mirror) throw new Error('MIRROR_NOT_FOUND');
+  const user = await UserModel.findOne({ googleId });
+  if (!user) throw new NotFound('Usuário não encontrado.');
 
-    return res.json({ success: true, data: mirror, message: 'Espelho conectado!' });
-  } catch (error) {
-    return res.status(400).json({
-      success: false,
-      error: error.message,
-      message: 'Não foi possível conectar ao espelho.',
-    });
-  }
+  const mirror = await MirrorModel.findOneAndUpdate(
+    { code },
+    { user: user._id, code: null },
+    { new: true },
+  );
+  if (!mirror) throw new BadRequest('Espelho não encontrado.');
+
+  return res.json({
+    success: true,
+    data: mirror,
+    message: 'Espelho conectado!',
+  });
 };
 
-export default {
-  create,
-  show,
-  connect,
+type Handlers = {
+  [key: string]: Route;
 };
+
+const handlers: Handlers = {
+  create: async (req, res) => createController(create, req, res),
+  show: async (req, res) => createController(show, req, res),
+  connect: async (req, res) => createController(connect, req, res),
+};
+
+export default handlers;
