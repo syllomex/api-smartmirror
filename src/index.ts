@@ -13,7 +13,7 @@ connect();
 app.use(
   cors({
     origin: 'https://smartmirror-display.vercel.app',
-    allowedHeaders: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
   }),
 );
 app.use(express.urlencoded({ extended: true }));
