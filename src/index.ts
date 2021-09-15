@@ -10,18 +10,13 @@ const app = express();
 
 connect();
 
-// const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development';
 
-// app.use(
-//   cors({
-//     origin: isDev ? 'http://localhost:3000' : 'https://smartmirror-display.vercel.app',
-//     credentials: true,
-//     allowedHeaders: '*',
-//   }),
-// );
-
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://smartmirror-display.vercel.app');
+app.use((_req, res, next) => {
+  res.header(
+    'Access-Control-Allow-Origin',
+    isDev ? 'http://localhost:3000' : 'https://smartmirror-display.vercel.app',
+  );
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   res.header('Access-Control-Allow-Credentials', '1');
