@@ -1,5 +1,5 @@
 import express from 'express';
-import cors from 'cors';
+// import cors from 'cors';
 import connect from './config/mongoose';
 
 import 'dotenv';
@@ -10,7 +10,7 @@ const app = express();
 
 connect();
 
-const isDev = process.env.NODE_ENV === 'development';
+// const isDev = process.env.NODE_ENV === 'development';
 
 // app.use(
 //   cors({
