@@ -1,5 +1,5 @@
 import express from 'express';
-// import cors from 'cors';
+import cors from 'cors';
 import connect from './config/mongoose';
 
 import 'dotenv';
@@ -10,20 +10,8 @@ const app = express();
 
 connect();
 
-const isDev = process.env.NODE_ENV === 'development';
-
-app.use((_req, res, next) => {
-  res.header(
-    'Access-Control-Allow-Origin',
-    isDev ? 'http://localhost:3000' : 'https://smartmirror-display.vercel.app',
-  );
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Credentials', '1');
-
-  next();
-});
-
+// const isDev = process.env.NODE_ENV === 'development';
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(router);

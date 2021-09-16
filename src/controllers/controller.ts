@@ -22,7 +22,7 @@ const createController = async (handler: Route, req: Request, res: Response<any>
     const response = await handler(req, res);
     return response;
   } catch (err) {
-    return res.status(err.status).json({ success: false, error: err, message: err.message });
+    return res.status(err.status || 500).json({ success: false, error: err, message: err.message });
   }
 };
 
