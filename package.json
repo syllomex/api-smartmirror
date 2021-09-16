@@ -30,7 +30,7 @@
     "typescript": "^4.4.2"
   },
   "scripts": {
-    "start": "./node_modules/typescript/bin/tsc && node ./dist/index.js",
+    "start": "node ./node_modules/typescript/bin/tsc && node ./dist/index.js",
     "dev": "NODE_ENV=development ts-node-dev --transpile-only --ignore-watch node_modules ./src/index.ts"
   },
   "dependencies": {
