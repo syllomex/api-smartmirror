@@ -75,6 +75,12 @@ const list: Route<ListMailsRequest, ListMailsResponse> = async (req, res) => {
 
     return res.json({ success: true, data: messages });
   } catch (err) {
+    if (!(err instanceof Error)) {
+      return res
+        .status(500)
+        .json({ success: false, error: 'Internal server error', message: 'Erro interno.' });
+    }
+
     return res.status(400).json({
       success: false,
       message: 'Não foi possível obter os e-mails.',

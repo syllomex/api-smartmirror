@@ -16,6 +16,12 @@ const signIn: Route<SignInRequest, SignInResponse> = async (req, res) => {
 
     return res.json({ success: true, data: { accessToken: token, user } });
   } catch (error) {
+    if (!(error instanceof Error)) {
+      return res
+        .status(500)
+        .json({ success: false, error: 'Internal server error', message: 'Erro interno.' });
+    }
+
     return res
       .status(400)
       .json({ success: false, error: error.message, message: 'Login mal sucedido.' });
@@ -46,7 +52,17 @@ const storeToken: Route<StoreGoogleTokenRequest, {}> = async (req, res) => {
 
     return res.json({ data: user, success: true, message: 'Token adicionado!' });
   } catch (err) {
-    return res.json({ success: false, error: err, message: 'Não foi possível adicionar o token.' });
+    if (!(err instanceof Error)) {
+      return res
+        .status(500)
+        .json({ success: false, error: 'Internal server error', message: 'Erro interno.' });
+    }
+
+    return res.json({
+      success: false,
+      error: err.message,
+      message: 'Não foi possível adicionar o token.',
+    });
   }
 };
 

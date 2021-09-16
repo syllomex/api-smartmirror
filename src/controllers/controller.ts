@@ -22,7 +22,30 @@ const createController = async (handler: Route, req: Request, res: Response<any>
     const response = await handler(req, res);
     return response;
   } catch (err) {
-    return res.status(err.status || 500).json({ success: false, error: err, message: err.message });
+    if (
+      err instanceof BadRequest
+      || err instanceof Unauthorized
+      || err instanceof InternalServerError
+      || err instanceof NotFound
+    ) {
+      return res
+        .status(err.status || 500)
+        .json({ success: false, error: err.message, message: err.message });
+    }
+
+    if (err instanceof Error) {
+      return res
+        .status(500)
+        .json({ success: false, error: err.message, message: 'Erro interno do servidor.' });
+    }
+
+    return res
+      .status(500)
+      .json({
+        success: false,
+        error: 'Internal server error',
+        message: 'Erro interno do servidor.',
+      });
   }
 };
 

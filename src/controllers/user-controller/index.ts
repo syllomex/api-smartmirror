@@ -22,6 +22,12 @@ const create: Route<CreateUserRequest, User> = async (req, res) => {
       message: 'Usuário cadastrado!',
     });
   } catch (err) {
+    if (!(err instanceof Error)) {
+      return res
+        .status(500)
+        .json({ success: false, error: 'Internal server error', message: 'Erro interno.' });
+    }
+
     return res.status(400).json({
       error: err.message,
       message: 'Não foi possível cadastrar o usuário.',
