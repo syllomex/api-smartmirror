@@ -13,6 +13,8 @@ router.post('/sign-in', (req, res) => authController.signIn(req, res));
 router.post('/mirrors', (req, res) => mirrorController.create(req, res));
 router.get('/mirrors', (req, res) => mirrorController.show(req, res));
 router.post('/mirrors/connect', (req, res) => mirrorController.connect(req, res));
+router.delete('/mirrors', (req, res) => mirrorController.disconnect(req, res));
+router.get('/mirrors/isConnected', (req, res) => mirrorController.isConnected(req, res));
 
 router.post('/store-token', (req, res) => authController.storeToken(req, res));
 
