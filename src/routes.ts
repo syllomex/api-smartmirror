@@ -11,6 +11,8 @@ const router = Router({ mergeParams: true });
 router.post('/create-user', (req, res) => userController.create(req, res));
 router.post('/sign-in', (req, res) => authController.signIn(req, res));
 
+router.post('/geolocation', (req, res) => userController.storeGeolocation(req, res));
+
 router.post('/mirrors', (req, res) => mirrorController.create(req, res));
 router.get('/mirrors', (req, res) => mirrorController.show(req, res));
 router.post('/mirrors/connect', (req, res) => mirrorController.connect(req, res));

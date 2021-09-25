@@ -3,7 +3,8 @@ import UserModel from '../../models/User';
 import { User } from '../../models/types';
 import { Route } from '../../types/http';
 
-import { CreateUserRequest } from './types';
+import { CreateUserRequest, StoreGeolocationRequest } from './types';
+import { BadRequest, createController, Handlers } from '../controller';
 
 const create: Route<CreateUserRequest, User> = async (req, res) => {
   try {
@@ -36,8 +37,20 @@ const create: Route<CreateUserRequest, User> = async (req, res) => {
   }
 };
 
-const userController = {
+const storeGeolocation: Route<StoreGeolocationRequest> = async (req, res) => {
+  const { id, latitude, longitude } = req.body;
+
+  if (!id) throw new BadRequest('ID de usuário não informado.');
+  if (!latitude || !longitude) throw new BadRequest('Latitude ou longitude não inforamdas.');
+
+  const user = await UserModel.findByIdAndUpdate(id, { latitude, longitude }, { new: true });
+
+  return res.json({ success: true, data: { user } });
+};
+
+const userController: Handlers = {
   create,
+  storeGeolocation: async (req, res) => createController(storeGeolocation, req, res),
 };
 
 export default userController;

@@ -4,6 +4,8 @@ export type User = {
   name: string;
   googleId: string;
   mirrors: Mirror[];
+  latitude?: number;
+  longitude?: number;
 };
 
 export type Mirror = {

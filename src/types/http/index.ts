@@ -8,6 +8,6 @@ export type Response<Data> = Express.Response<
 >;
 
 export type Route<Body = any, Data = any> = (
-  req: Request<Body>,
+  req: Request<Partial<Body>>,
   res: Response<Data>,
 ) => Promise<any>;
