@@ -49,6 +49,10 @@ const createController = async (handler: Route, req: Request, res: Response<any>
   }
 };
 
+type Handlers = {
+  [key: string]: Route;
+};
+
 export {
-  createController, BadRequest, NotFound, Unauthorized, InternalServerError,
+  createController, BadRequest, NotFound, Unauthorized, InternalServerError, Handlers,
 };

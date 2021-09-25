@@ -3,7 +3,9 @@ import MirrorModel from '../../models/Mirror';
 import UserModel from '../../models/User';
 
 import { Route } from '../../types/http';
-import { BadRequest, createController, NotFound } from '../controller';
+import {
+  BadRequest, createController, Handlers, NotFound,
+} from '../controller';
 
 const create: Route<{ code?: string }> = async (req, res) => {
   const { code } = req.body;
@@ -81,10 +83,6 @@ const isConnected: Route<{ hash?: string }> = async (req, res) => {
   const mirror = await MirrorModel.findOne({ hash });
 
   return res.json({ success: true, data: { connected: !!mirror } });
-};
-
-type Handlers = {
-  [key: string]: Route;
 };
 
 const handlers: Handlers = {

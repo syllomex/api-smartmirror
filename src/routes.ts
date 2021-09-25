@@ -4,6 +4,7 @@ import mailController from './controllers/mail-controller';
 import mirrorController from './controllers/mirror-controller';
 
 import userController from './controllers/user-controller';
+import weatherController from './controllers/weather-controller';
 
 const router = Router({ mergeParams: true });
 
@@ -19,5 +20,7 @@ router.get('/mirrors/isConnected', (req, res) => mirrorController.isConnected(re
 router.post('/store-token', (req, res) => authController.storeToken(req, res));
 
 router.get('/mails', (req, res) => mailController.list(req, res));
+
+router.get('/weather', (req, res) => weatherController.get(req, res));
 
 export default router;

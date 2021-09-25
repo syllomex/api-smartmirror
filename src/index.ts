@@ -1,8 +1,11 @@
+/* eslint-disable import/first */
 import express from 'express';
 import cors from 'cors';
-import connect from './config/mongoose';
+import dotenv from 'dotenv';
 
-import 'dotenv';
+dotenv.config();
+
+import connect from './config/mongoose';
 
 import router from './routes';
 
