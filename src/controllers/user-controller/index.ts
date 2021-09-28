@@ -38,12 +38,16 @@ const create: Route<CreateUserRequest, User> = async (req, res) => {
 };
 
 const storeGeolocation: Route<StoreGeolocationRequest> = async (req, res) => {
-  const { id, latitude, longitude } = req.body;
+  const { googleId, latitude, longitude } = req.body;
 
-  if (!id) throw new BadRequest('ID de usuário não informado.');
+  if (!googleId) throw new BadRequest('ID de usuário não informado.');
   if (!latitude || !longitude) throw new BadRequest('Latitude ou longitude não inforamdas.');
 
-  const user = await UserModel.findByIdAndUpdate(id, { latitude, longitude }, { new: true });
+  const user = await UserModel.findOneAndUpdate(
+    { googleId },
+    { latitude, longitude },
+    { new: true },
+  );
 
   return res.json({ success: true, data: { user } });
 };

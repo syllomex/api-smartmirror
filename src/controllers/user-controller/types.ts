@@ -4,7 +4,7 @@ export type CreateUserRequest = {
 };
 
 export type StoreGeolocationRequest = {
-  id: string;
+  googleId: string;
   latitude: number;
   longitude: number;
 };

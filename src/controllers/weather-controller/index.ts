@@ -5,15 +5,17 @@ import {
   BadRequest, createController, Handlers, NotFound,
 } from '../controller';
 
-const get: Route = async (req, res) => {
-  const { latitude, longitude, id } = req.query;
+import { GetWeatherRequest } from './types';
 
-  if (!id && (!latitude || !longitude)) throw new BadRequest('Informe o ID do usuário ou a latitude e longitude.');
+const get: Route = async (req, res) => {
+  const { latitude, longitude, googleId } = req.query as GetWeatherRequest;
+
+  if (!googleId && (!latitude || !longitude)) throw new BadRequest('Informe o ID do usuário ou a latitude e longitude.');
 
   const coords = await (async () => {
     if (latitude && longitude) return { lat: latitude, lon: longitude };
 
-    const user = await User.findById(id);
+    const user = await User.findOne({ googleId });
     if (!user) return null;
 
     return { lat: user.latitude, lon: user.longitude };
