@@ -38,7 +38,7 @@ const list: Route<ListMailsRequest, ListMailsResponse> = async (req, res) => {
 
     const result = await google
       .gmail({ version: 'v1', auth })
-      .users.messages.list({ userId: 'me', maxResults: 5 });
+      .users.messages.list({ userId: 'me', maxResults: 3 });
 
     if (result.data.resultSizeEstimate === 0) return res.json({ success: true, data: [] });
 
