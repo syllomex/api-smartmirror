@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import agendaController from './controllers/agenda-controller';
 import authController from './controllers/auth-controller';
 import mailController from './controllers/mail-controller';
 import mirrorController from './controllers/mirror-controller';
@@ -18,10 +19,12 @@ router.get('/mirrors', (req, res) => mirrorController.show(req, res));
 router.post('/mirrors/connect', (req, res) => mirrorController.connect(req, res));
 router.delete('/mirrors', (req, res) => mirrorController.disconnect(req, res));
 router.get('/mirrors/isConnected', (req, res) => mirrorController.isConnected(req, res));
+router.get('/mirrors/widgets', (req, res) => mirrorController.widgets(req, res));
 
 router.post('/store-token', (req, res) => authController.storeToken(req, res));
 
 router.get('/mails', (req, res) => mailController.list(req, res));
+router.get('/calendars', (req, res) => agendaController.list(req, res));
 
 router.get('/weather', (req, res) => weatherController.get(req, res));
 
