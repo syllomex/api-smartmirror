@@ -1,40 +1,19 @@
 import { google } from 'googleapis';
 import { Route } from '../../types/http';
+import { BadRequest } from '../controller';
 import { ListMailsRequest, ListMailsResponse } from './types';
 
 const list: Route<ListMailsRequest, ListMailsResponse> = async (req, res) => {
   try {
     const auth = new google.auth.OAuth2({
       clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
     });
 
-    const { 'google-access-token': accessToken, 'google-refresh-token': refreshToken } = req.query;
+    const { 'google-refresh-token': refreshToken } = req.query;
 
-    if (
-      typeof accessToken !== 'string'
-      || !accessToken.length
-      || (!!refreshToken && typeof refreshToken !== 'string')
-    ) throw new Error('Token não informado.');
+    if (typeof refreshToken !== 'string') throw new BadRequest('Refresh token não informado.');
 
-    if (refreshToken?.length) {
-      auth.setCredentials({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-        scope: process.env.GOOGLE_SCOPES,
-      });
-
-      const headers = await auth.getRequestHeaders();
-
-      if (headers.Authorization) {
-        auth.setCredentials({ access_token: headers.Authorization.split(' ')[1] });
-      }
-    } else {
-      auth.setCredentials({
-        access_token: accessToken,
-        scope: process.env.GOOGLE_SCOPES,
-      });
-    }
+    auth.setCredentials({ refresh_token: refreshToken, scope: process.env.GOOGLE_SCOPES });
 
     const result = await google
       .gmail({ version: 'v1', auth })
@@ -52,7 +31,9 @@ const list: Route<ListMailsRequest, ListMailsResponse> = async (req, res) => {
 
     const messages = promisesResult.map((item) => {
       function getHeader(header: string) {
-        return item.data.payload?.headers?.find((_header) => _header.name === header)?.value;
+        return item.data.payload?.headers?.find(
+          (_header) => _header.name?.toUpperCase() === header.toUpperCase(),
+        )?.value;
       }
 
       const date = (() => {
