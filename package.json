@@ -43,6 +43,7 @@
     "googleapis": "^84.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.3",
+    "socket.io": "^4.2.0",
     "uuid": "^8.3.2"
   }
 }
