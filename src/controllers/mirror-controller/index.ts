@@ -75,6 +75,16 @@ const disconnect: Route<{ hash?: string }> = async (req, res) => {
   });
 };
 
+const widgets: Route = async (req, res) => {
+  const { hash } = req.query;
+
+  if (!hash?.length || typeof hash !== 'string') throw new BadRequest('Hash não informado.');
+
+  const _widgets = (await MirrorModel.findOne({ hash }))?.widgets || [];
+
+  return res.json({ success: true, data: _widgets });
+};
+
 const isConnected: Route<{ hash?: string }> = async (req, res) => {
   const { hash } = req.query;
 
@@ -91,6 +101,7 @@ const handlers: Handlers = {
   connect: async (req, res) => createController(connect, req, res),
   disconnect: async (req, res) => createController(disconnect, req, res),
   isConnected: async (req, res) => createController(isConnected, req, res),
+  widgets: async (req, res) => createController(widgets, req, res),
 };
 
 export default handlers;

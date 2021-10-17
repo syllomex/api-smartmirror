@@ -17,8 +17,15 @@ const schema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    widgets: {
+      type: [String],
+      required: true,
+      default: [],
+    },
   },
   { timestamps: true },
 );
 
-export default mongoose.model<Mirror>('mirror', schema);
+const MirrorModel = mongoose.model<Mirror>('mirror', schema);
+
+export default MirrorModel;

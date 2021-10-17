@@ -12,4 +12,5 @@ export type Mirror = {
   user?: User | null;
   code?: string | null;
   hash: string;
+  widgets: string[];
 };
