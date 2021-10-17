@@ -38,8 +38,13 @@ const storeToken: Route<StoreGoogleTokenRequest, {}> = async (req, res) => {
       const exists = await User.findOne({ googleId });
 
       if (exists) {
-        await exists.update({ googleAccessToken: accessToken, googleRefreshToken: refreshToken });
-        return exists;
+        const updated = await User.findOneAndUpdate(
+          { googleId },
+          { googleAccessToken: accessToken, googleRefreshToken: refreshToken },
+          { new: true },
+        );
+
+        return updated;
       }
 
       return User.create({
